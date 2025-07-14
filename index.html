@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Hodim Oylik Hisoblagich</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #007aff;
+            --primary-dark: #005fcc;
+            --bg-light: #f9f9f9;
+            --text-dark: #333;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--primary);
+        }
+
+        form label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        form input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f5faff;
+            border-left: 5px solid var(--primary);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        .result-box h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👨‍💼 Hodim Oylik Hisoblagich</h1>
+
+        <form id="fullForm">
+            <h2>1. Hodim Ma’lumotlari</h2>
+            <label>To‘liq ismi:</label>
+            <input type="text" id="name" required>
+
+            <label>Lavozimi:</label>
+            <input type="text" id="position" required>
+
+            <label>Bo‘limi:</label>
+            <input type="text" id="department">
+
+            <label>Telefon raqami:</label>
+            <input type="tel" id="phone">
+
+            <label>Email manzili:</label>
+            <input type="email" id="email">
+
+            <h2>2. Oylik Hisoblash</h2>
+            <label>Asosiy oylik (so'm):</label>
+            <input type="number" id="baseSalary" required>
+
+            <label>Ish kunlari soni:</label>
+            <input type="number" id="workingDays" required>
+
+            <label>Kunduzgi soatlar (soat):</label>
+            <input type="number" id="dayHours" required>
+
+            <label>Tungi soatlar (soat):</label>
+            <input type="number" id="nightHours" required>
+
+            <label>Daromad solig‘i (%):</label>
+            <input type="number" id="taxPercent" value="12">
+
+            <label>Boshqa ushlanmalar (so'm):</label>
+            <input type="number" id="otherDeductions" value="0">
+
+            <label>Oldindan olingan qarz (so'm):</label>
+            <input type="number" id="advanceDebt" value="0">
+
+            <label>Berilgan avans (so'm):</label>
+            <input type="number" id="prepayment" value="0">
+
+            <label>Oldingi qarzdorligi (so'm):</label>
+            <input type="number" id="prevDebt" value="0">
+
+            <button type="submit">✅ Hisoblash</button>
+        </form>
+
+        <div id="outputBox" class="result-box" style="display:none;"></div>
+    </div>
+
+    <script>
+        document.getElementById("fullForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            // Hodim ma'lumotlari
+            const name = document.getElementById("name").value;
+            const position = document.getElementById("position").value;
+            const department = document.getElementById("department").value;
+            const phone = document.getElementById("phone").value;
+            const email = document.getElementById("email").value;
+
+            // Oylik ma'lumotlari
+            const baseSalary = parseFloat(document.getElementById('baseSalary').value);
+            const workingDays = parseInt(document.getElementById('workingDays').value);
+            const dayHours = parseFloat(document.getElementById('dayHours').value);
+            const nightHours = parseFloat(document.getElementById('nightHours').value);
+            const taxPercent = parseFloat(document.getElementById('taxPercent').value);
+            const otherDeductions = parseFloat(document.getElementById('otherDeductions').value);
+            const advanceDebt = parseFloat(document.getElementById('advanceDebt').value);
+            const prepayment = parseFloat(document.getElementById('prepayment').value);
+            const prevDebt = parseFloat(document.getElementById('prevDebt').value);
+
+            const perDaySalary = baseSalary / 30;
+            const totalSalary = perDaySalary * workingDays;
+            const extraDayPay = dayHours * 10000;
+            const extraNightPay = nightHours * 15000;
+            const grossSalary = totalSalary + extraDayPay + extraNightPay;
+            const taxAmount = (grossSalary * taxPercent) / 100;
+            const totalDeductions = taxAmount + otherDeductions + advanceDebt + prepayment + prevDebt;
+            const netSalary = grossSalary - totalDeductions;
+            const employeeGets = netSalary >= 0 ? netSalary : 0;
+            const employeeOwes = netSalary < 0 ? Math.abs(netSalary) : 0;
+
+            const outputBox = document.getElementById("outputBox");
+            outputBox.style.display = "block";
+            outputBox.innerHTML = `
+                <h3>📋 Yakuniy Hisobot</h3>
+                <p><strong>👤 Ism:</strong> ${name}</p>
+                <p><strong>📌 Lavozimi:</strong> ${position}</p>
+                <p><strong>🏢 Bo‘lim:</strong> ${department}</p>
+                <p><strong>📞 Tel:</strong> ${phone}</p>
+                <p><strong>✉ Email:</strong> ${email}</p>
+                <hr>
+                <p><strong>💼 Asosiy oylik:</strong> ${baseSalary.toLocaleString()} so‘m</p>
+                <p><strong>📅 Ish kunlari:</strong> ${workingDays}</p>
+                <p><strong>🕒 Kunduzgi soat:</strong> ${dayHours}</p>
+                <p><strong>🌙 Tungi soat:</strong> ${nightHours}</p>
+                <p><strong>💰 Jami ish haqi:</strong> ${grossSalary.toLocaleString()} so‘m</p>
+                <p><strong>💸 Soliq (${taxPercent}%):</strong> ${taxAmount.toLocaleString()} so‘m</p>
+                <p><strong>➖ Boshqa ushlanmalar:</strong> ${otherDeductions.toLocaleString()} so‘m</p>
+                <p><strong>📌 Oldindan qarz:</strong> ${advanceDebt.toLocaleString()} so‘m</p>
+                <p><strong>📌 Avans:</strong> ${prepayment.toLocaleString()} so‘m</p>
+                <p><strong>📌 Oldingi qarzdorlik:</strong> ${prevDebt.toLocaleString()} so‘m</p>
+                <hr>
+               <p><strong>✅ Hodim oladigan:</strong> ${employeeGets.toLocaleString()} so‘m</p>
+<p style="color:red;"><strong>🚨 Hodim qarzdorligi:</strong> ${Number(employeeOwes.toFixed(2)).toLocaleString()} so‘m</p>
+`;
+        });
+    </script>
+</body>
+</html>
