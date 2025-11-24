@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Ombor CRUD</title>
+<link rel="stylesheet" href="/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Ombor Tavarlari</h1>
+
+<h2>Yangi Tavar Qo'shish</h2>
+<div class="form-container">
+<form method="POST" action="/add">
+    <input type="text" name="kod" placeholder="Kod" required>
+    <input type="text" name="nomi" placeholder="Nomi" required>
+    <input type="text" name="rangi" placeholder="Rangi">
+    <input type="number" name="soni" placeholder="Soni" required>
+    <select name="qator" required>
+        <option value="">Qator</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+    </select>
+    <input type="text" name="stellaj" placeholder="Stellaj" required>
+    <button type="submit">Qo'shish</button>
+</form>
+</div>
+
+<h2>Barcha Tavarlari</h2>
+<div class="table-container">
+<table>
+<tr>
+<th>ID</th><th>Kod</th><th>Nomi</th><th>Rangi</th><th>Soni</th><th>Qator</th><th>Stellaj</th><th>Amallar</th>
+</tr>
+<% tavars.forEach(tavar => { %>
+<tr>
+<td><%= tavar.id %></td>
+<td><%= tavar.kod %></td>
+<td><%= tavar.nomi %></td>
+<td><%= tavar.rangi %></td>
+<td><%= tavar.soni %></td>
+<td><%= tavar.qator %></td>
+<td><%= tavar.stellaj %></td>
+<td>
+<a href="/edit/<%= tavar.id %>">Tahrirlash</a> | 
+<a href="/delete/<%= tavar.id %>">O'chirish</a>
+</td>
+</tr>
+<% }) %>
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Tahrirlash</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h2 style="text-align:center;">Tavarni tahrirlash</h2>
+<div class="form-container">
+<form method="POST" action="/update/<%= tavar.id %>">
+<input type="text" name="kod" value="<%= tavar.kod %>" placeholder="Kod" required>
+<input type="text" name="nomi" value="<%= tavar.nomi %>" placeholder="Nomi" required>
+<input type="text" name="rangi" value="<%= tavar.rangi %>" placeholder="Rangi">
+<input type="number" name="soni" value="<%= tavar.soni %>" placeholder="Soni" required>
+<select name="qator" required>
+<option value="A" <%= tavar.qator=='A'?'selected':'' %>>A</option>
+<option value="B" <%= tavar.qator=='B'?'selected':'' %>>B</option>
+<option value="C" <%= tavar.qator=='C'?'selected':'' %>>C</option>
+</select>
+<input type="text" name="stellaj" value="<%= tavar.stellaj %>" placeholder="Stellaj" required>
+<button type="submit">Yangilash</button>
+</form>
+</div>
+</body>
+</html>
